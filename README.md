@@ -1,11 +1,15 @@
-# Adria Test Environment
+# Adria – Test Environment
 
-Build a test environment for Adria with Docker compose..
+This repository contains the Docker-based test environment for the Adria project.
+It allows running the complete Adria solution locally without any IDE or source code,
+and simulates a production environment as closely as possible.
 
-## Goal
-Provide a Docker Compose setup to create a test environment for Adria. It must be possible to run the whole Adria solution with a single command.
+## Prerequisites
+- Docker Desktop
+
+## Start the environment
+
+From the root of this repository, run:
+
 ```bash
-docker compose up -d
-```
-
-See the project document for more information.
+docker compose -f docker-compose.yml up -d

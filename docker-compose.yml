@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  database.adria:
+    image: mysql:8.0
+    container_name: database.adria
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: scan
+      MYSQL_DATABASE: nutriscan
+      MYSQL_USER: nutri
+      MYSQL_PASSWORD: scan
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - adria-test
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server.adria:
+    image: hcr.technet.howest.be/adria-server-group-08:latest
+    container_name: server.adria
+    ports:
+      - "8000:8000"
+    env_file:
+      - .adria-server.test.env
+    networks:
+      - adria-test
+    depends_on:
+      database.adria:
+        condition: service_healthy
+
+  client.adria:
+    image: hcr.technet.howest.be/adria-client-group-08:latest
+    container_name: client.adria
+    ports:
+      - "80:80"
+    networks:
+      - adria-test
+    depends_on:
+      - server.adria
+
+volumes:
+  mysql_data:
+
+networks:
+  adria-test:
+    ipam:
+      config:
+        - subnet: 10.30.0.0/16
