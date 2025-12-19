@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   database.adria:
     image: mysql:8.0
